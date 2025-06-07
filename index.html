@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEV ARC - Soluções Digitais de Alta Performance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script>
+        // Configuração do Tailwind para a paleta de cores (Branco, Preto e Azul)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': { // Cor Azul Brilhante
+                            '500': '#007BFF', // Azul principal
+                            '600': '#0056b3'  // Azul mais escuro para hover
+                        },
+                        'base': { // Tons de texto e base
+                            '700': '#374151', // cinza-700
+                            '800': '#1f2937', // cinza-800
+                            '900': '#111827'  // cinza-900
+                        },
+                        'light': { // Tons de fundo e base
+                            'white': '#FFFFFF',
+                            '100': '#f9fafb', // cinza-50
+                            '200': '#f3f4f6', // cinza-100
+                            '300': '#e5e7eb'  // cinza-200
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos Globais e Customizados */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFFFFF;
+            /* light-white */
+            color: #374151;
+            /* base-700 */
+            overflow-x: hidden;
+        }
+
+        /* Fundo da Seção Hero */
+        .hero-bg {
+            background-color: #f9fafb;
+            /* light-100 */
+        }
+
+        /* Classes de utilidade para a cor primária */
+        .accent-text {
+            color: #007BFF;
+        }
+
+        .accent-border {
+            border-color: #007BFF;
+        }
+
+        /* Estilização dos títulos e subtítulos */
+        .section-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: #111827;
+            /* base-900 */
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #374151;
+            /* base-700 */
+            margin-bottom: 3.5rem;
+            text-align: center;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        /* Estilos unificados para os cards */
+        .card-base {
+            background-color: #FFFFFF;
+            /* light-white */
+            border: 1px solid #e5e7eb;
+            /* light-300 */
+            border-radius: 0.75rem;
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-base:hover {
+            transform: translateY(-8px);
+            border-color: #007BFF;
+            box-shadow: 0 10px 25px rgba(0, 123, 255, 0.1), 0 4px 10px rgba(0, 123, 255, 0.08);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #007BFF;
+        }
+
+        .card-content,
+        .card-content ul {
+            color: #374151;
+            /* base-700 */
+            flex-grow: 1;
+            font-size: 0.95rem;
+        }
+
+        .card-content ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 0.5rem;
+        }
+
+        .card-content ul li {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .card-content ul li::before {
+            content: '✓';
+            color: #007BFF;
+            margin-right: 0.75rem;
+            font-weight: bold;
+            line-height: 1.5;
+            flex-shrink: 0;
+        }
+
+        .icon-placeholder {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1.25rem;
+            color: #007BFF;
+            flex-shrink: 0;
+        }
+
+        /* Formulários */
+        .form-input,
+        .form-select,
+        .form-textarea {
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            color: #111827;
+            border-radius: 0.375rem;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #007BFF;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Estrutura do Time */
+        .team-structure .leader-line::after,
+        .team-structure .horizontal-line,
+        .team-structure .subordinate-line::before {
+            background-color: #007BFF;
+        }
+
+        .team-structure .leader-line::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: -3rem;
+            z-index: 0;
+        }
+
+        .team-structure .horizontal-line {
+            height: 2px;
+        }
+
+        .team-structure .subordinate-line::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            top: -2rem;
+            z-index: 0;
+        }
+
+        /* Pacote em destaque */
+        .package-card.featured {
+            border-color: #007BFF;
+            box-shadow: 0 0 25px rgba(0, 123, 255, 0.2);
+        }
+
+        /* Efeito de digitação */
+        .typing-effect-cursor {
+            border-right: .1em solid #007BFF;
+            animation: blink-caret .75s step-end infinite;
+        }
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: #007BFF;
+            }
+        }
+
+        /* Animações */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-down {
+            animation: fadeInDown 0.8s ease-out both;
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        /* Seção de Parceiros & Galeria - Sliders */
+        @keyframes slide {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        .logo-slider {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0));
+            mask-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0));
+        }
+
+        .logo-track {
+            display: flex;
+            width: calc(200px * 14);
+            /* (logo width aproximado) * (numero de logos * 2) */
+            animation: slide 40s linear infinite;
+        }
+
+        .logo-track img {
+            height: 32px;
+            width: auto;
+            margin: 0 40px;
+            filter: grayscale(100%);
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+
+        .logo-track:hover img {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+
+        .logo-slider:hover .logo-track,
+        .project-slider:hover .project-track {
+            animation-play-state: paused;
+        }
+
+        .project-slider {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+
+        .project-track {
+            display: flex;
+            width: calc(400px * 12);
+            /* (card width + gap) * (numero de imagens * 2) */
+            animation: slide 60s linear infinite;
+        }
+
+        .project-image-card {
+            width: 360px;
+            flex-shrink: 0;
+            margin: 0 20px;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .project-image-card:hover {
+            transform: scale(1.05);
+        }
+
+        .project-image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body class="bg-light-white text-base-700">
+
+    <!-- Navbar -->
+    <nav
+        class="bg-light-white/80 backdrop-blur-lg fixed w-full z-50 transition-all duration-300 py-3 border-b border-light-300">
+        <div class="container mx-auto px-4 sm:px-6 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-3">
+                <!-- LOGO DA EMPRESA -->
+                <img src="imagens/logo.png" alt="Logo DEV ARC" class="h-10 w-10 rounded-full object-cover"
+                    onerror="this.onerror=null;this.src='https://placehold.co/100x100/007BFF/FFFFFF?text=DA';">
+                <span class="text-3xl font-bold accent-text">DEV ARC</span>
+            </a>
+
+            <!-- Hamburger (Mobile) -->
+            <div class="md:hidden">
+                <button id="hamburgerButton" class="text-base-800 focus:outline-none">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Menu Desktop -->
+            <div class="hidden md:flex space-x-3 lg:space-x-5 items-center text-sm font-medium">
+                <a href="#sobre" class="text-base-800 hover:accent-text transition-colors">Sobre</a>
+                <a href="#equipe" class="text-base-800 hover:accent-text transition-colors">Equipe</a>
+                <a href="#servicos" class="text-base-800 hover:accent-text transition-colors">Serviços</a>
+                <a href="#pacotes" class="text-base-800 hover:accent-text transition-colors">Pacotes</a>
+                <a href="#projetos" class="text-base-800 hover:accent-text transition-colors">Projetos</a>
+                <a href="#depoimentos" class="text-base-800 hover:accent-text transition-colors">Depoimentos</a>
+                <a href="#contato"
+                    class="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 hover:scale-105">Fale
+                    Conosco</a>
+            </div>
+        </div>
+        <!-- Menu Mobile -->
+        <div id="mobileMenu"
+            class="md:hidden hidden bg-white border-t border-light-300 absolute w-full left-0 top-full shadow-lg">
+            <a href="#sobre"
+                class="block py-3 px-4 text-sm text-base-800 hover:bg-light-200 transition-colors">Sobre</a>
+            <a href="#equipe"
+                class="block py-3 px-4 text-sm text-base-800 hover:bg-light-200 transition-colors">Equipe</a>
+            <a href="#servicos"
+                class="block py-3 px-4 text-sm text-base-800 hover:bg-light-200 transition-colors">Serviços</a>
+            <a href="#pacotes"
+                class="block py-3 px-4 text-sm text-base-800 hover:bg-light-200 transition-colors">Pacotes</a>
+            <a href="#projetos"
+                class="block py-3 px-4 text-sm text-base-800 hover:bg-light-200 transition-colors">Projetos</a>
+            <a href="#depoimentos"
+                class="block py-3 px-4 text-sm text-base-800 hover:bg-light-200 transition-colors">Depoimentos</a>
+            <a href="#contato"
+                class="block py-3 px-4 text-sm text-white bg-primary-500 hover:bg-primary-600 transition-colors text-center font-semibold">Fale
+                Conosco</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center justify-center pt-24 md:pt-20">
+        <div class="text-center px-6 py-12">
+            <!-- Título para Telas Menores -->
+            <h1 class="text-4xl font-bold mb-8 text-base-900 animate-fade-in-down block md:hidden">
+                DEV ARC: <span class="accent-text">Soluções Digitais de Impacto.</span>
+            </h1>
+            <!-- Título para Telas Maiores -->
+            <h1 class="hidden md:block text-5xl lg:text-6xl font-bold mb-8 text-base-900 animate-fade-in-down"
+                style="line-height: 1.4;">
+                DEV ARC: Construindo Soluções <br> <span id="typing-effect"
+                    class="accent-text typing-effect-cursor"></span>
+            </h1>
+            <p class="text-lg sm:text-xl md:text-2xl text-base-700 mb-12 max-w-4xl mx-auto animate-fade-in-up"
+                style="animation-delay: 0.2s;">
+                Da ideia ao lançamento, criamos sistemas e plataformas digitais que impulsionam o crescimento, otimizam
+                operações e posicionam sua marca como líder de mercado.
+            </p>
+            <a href="#contato"
+                class="inline-flex items-center justify-center bg-primary-500 hover:bg-primary-600 text-white font-bold py-3 px-8 rounded-lg text-lg md:text-xl transition-all duration-300 hover:scale-105 shadow-lg shadow-primary-500/30 animate-fade-in-up"
+                style="animation-delay: 0.4s;">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                Inicie Seu Projeto
+            </a>
+        </div>
+    </section>
+
+    <!-- Sobre Nós Section -->
+    <section id="sobre" class="py-20 md:py-28 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="section-title text-3xl md:text-4xl">Nossa Arquitetura: <span class="accent-text">Tecnologia,
+                    Estratégia e Parceria</span></h2>
+            <p class="section-subtitle">Somos mais que desenvolvedores; somos arquitetos do seu sucesso digital,
+                comprometidos com a excelência técnica e resultados mensuráveis.</p>
+            <div class="flex flex-col md:flex-row items-center gap-10 md:gap-16">
+                <div class="md:w-1/3 text-center">
+                    <img src="imagens/arcelino-fundador.jpg" alt="Arcelino Cavalcante - Fundador da DEV ARC"
+                        class="rounded-full mx-auto shadow-xl border-4 accent-border w-52 h-52 md:w-64 md:h-64 object-cover transition-transform duration-300 hover:scale-105"
+                        onerror="this.onerror=null;this.src='https://placehold.co/300x300/007BFF/FFFFFF?text=AC';">
+                    <h3 class="text-2xl xl:text-3xl font-semibold mt-6 mb-1 text-base-900">Arcelino Cavalcante</h3>
+                    <p class="accent-text text-lg font-medium">Fundador & Arquiteto-Chefe de Soluções</p>
+                </div>
+                <div class="md:w-2/3 text-lg text-base-700 space-y-5">
+                    <p><strong class="accent-text">Nossa Missão:</strong> Desenvolver soluções tecnológicas de alta
+                        performance que não apenas resolvem problemas complexos, mas criam oportunidades de crescimento
+                        sustentável para nossos parceiros.</p>
+                    <p><strong class="accent-text">Nosso Compromisso:</strong> É com a sua visão. Atuamos com
+                        transparência radical, engenharia de precisão e uma dedicação incansável para garantir que cada
+                        projeto seja um marco de inovação e qualidade, superando todas as expectativas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nossa Equipe Section -->
+    <section id="equipe" class="py-20 md:py-28 bg-light-100">
+        <div class="container mx-auto px-6 team-structure">
+            <h2 class="section-title text-3xl md:text-4xl">A <span class="accent-text">Força por Trás do Código</span>
+            </h2>
+            <p class="section-subtitle">Um time multidisciplinar de especialistas seniores, dedicados a transformar
+                desafios complexos em soluções digitais elegantes e eficazes.</p>
+
+            <div class="relative mb-12 flex justify-center">
+                <div class="card-base w-full max-w-sm text-center relative">
+                    <div class="leader-line"></div>
+                    <img src="imagens/arcelino-lider.jpg" alt="Foto de Arcelino Cavalcante"
+                        class="w-28 h-28 rounded-full object-cover mx-auto mb-4 border-4 accent-border"
+                        onerror="this.onerror=null;this.src='https://placehold.co/150x150/007BFF/FFFFFF?text=AC';">
+                    <h3 class="text-xl font-bold accent-text">Arcelino Cavalcante</h3>
+                    <p class="text-base-700 text-sm mb-2">Fundador & Arquiteto de Soluções</p>
+                    <p class="text-sm">Liderança técnica, inovação e desenvolvimento full-stack.</p>
+                </div>
+            </div>
+
+            <div class="w-full max-w-2xl mx-auto mb-12 hidden md:block">
+                <div class="horizontal-line h-0.5 bg-primary-500/30"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl mx-auto">
+                <div class="card-base text-center relative">
+                    <div class="subordinate-line hidden md:block"></div>
+                    <img src="imagens/mariana-frontend.jpg" alt="Foto de Mariana Silva"
+                        class="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-4 border-light-300"
+                        onerror="this.onerror=null;this.src='https://placehold.co/120x120/cccccc/FFFFFF?text=E1';">
+                    <h3 class="text-lg font-bold text-base-900">Mariana Silva</h3>
+                    <p class="text-base-700 text-sm mb-2">Engenheira de Frontend</p>
+                    <p class="text-sm">Interfaces responsivas, UX/UI e performance web.</p>
+                </div>
+                <div class="card-base text-center relative">
+                    <div class="subordinate-line hidden md:block"></div>
+                    <img src="imagens/rafael-backend.jpg" alt="Foto de Rafael Oliveira"
+                        class="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-4 border-light-300"
+                        onerror="this.onerror=null;this.src='https://placehold.co/120x120/cccccc/FFFFFF?text=E2';">
+                    <h3 class="text-lg font-bold text-base-900">Rafael Oliveira</h3>
+                    <p class="text-base-700 text-sm mb-2">Desenvolvedor Backend & DevOps</p>
+                    <p class="text-sm">APIs robustas, bancos de dados e infraestrutura cloud.</p>
+                </div>
+                <div class="card-base text-center relative">
+                    <div class="subordinate-line hidden md:block"></div>
+                    <img src="imagens/carla-ia.jpg" alt="Foto de Carla Souza"
+                        class="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-4 border-light-300"
+                        onerror="this.onerror=null;this.src='https://placehold.co/120x120/cccccc/FFFFFF?text=E3';">
+                    <h3 class="text-lg font-bold text-base-900">Carla Souza</h3>
+                    <p class="text-base-700 text-sm mb-2">Especialista em IA e Automação</p>
+                    <p class="text-sm">Machine learning, chatbots e automação de processos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nossos Serviços Section -->
+    <section id="servicos" class="py-20 md:py-28 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="section-title text-3xl md:text-4xl">Soluções de <span class="accent-text">Engenharia
+                    Digital</span></h2>
+            <p class="section-subtitle">Nosso portfólio de serviços é projetado para cobrir todas as facetas da sua
+                jornada de transformação digital, com foco em performance e escalabilidade.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Cards de serviço aqui... -->
+                <div class="card-base">
+                    <div class="icon-placeholder"><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9V3m0 18a9 9 0 009-9m-9 9a9 9 0 00-9-9" />
+                        </svg></div>
+                    <h3 class="card-title">Presença Web Estratégica</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>Sites Institucionais de alto impacto</li>
+                            <li>Lojas Virtuais (E-commerce) otimizadas para conversão</li>
+                            <li>Landing Pages de alta performance</li>
+                            <li>Portfólios Digitais profissionais</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-base">
+                    <div class="icon-placeholder"><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg></div>
+                    <h3 class="card-title">Sistemas e Plataformas Customizadas</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>Sistemas de gestão (ERP/CRM) sob medida</li>
+                            <li>Plataformas de Business Intelligence (BI)</li>
+                            <li>Ambientes de Ensino a Distância (EAD)</li>
+                            <li>Plataformas de Marketplace e Serviços</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-base">
+                    <div class="icon-placeholder"><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 17l-5-5 5-5" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 17l-5-5 5-5" />
+                        </svg></div>
+                    <h3 class="card-title">Desenvolvimento de APIs e Integrações</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>APIs RESTful seguras, documentadas e escaláveis</li>
+                            <li>Integração de sistemas legados e de terceiros</li>
+                            <li>Microsserviços e arquitetura distribuída</li>
+                            <li>Webhooks e comunicação em tempo real</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-base">
+                    <div class="icon-placeholder"><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg></div>
+                    <h3 class="card-title">IA e Automação de Processos</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>Chatbots inteligentes para atendimento e vendas</li>
+                            <li>Automação de tarefas com RPA (Robotic Process Automation)</li>
+                            <li>Modelos de IA para análise de dados e predição</li>
+                            <li>Integração com APIs de IA (OpenAI, Gemini)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-base">
+                    <div class="icon-placeholder"><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                        </svg></div>
+                    <h3 class="card-title">Consultoria e Estratégia Digital</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>Planejamento de arquitetura de software</li>
+                            <li>Consultoria em DevOps e Cloud (AWS, GCP, Azure)</li>
+                            <li>Otimização de performance (SEO Técnico)</li>
+                            <li>Auditoria de segurança e código</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-base">
+                    <div class="icon-placeholder"><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+                        </svg></div>
+                    <h3 class="card-title">Projetos Especiais</h3>
+                    <div class="card-content">
+                        <p>Possui um desafio tecnológico único? <strong class="accent-text">Nós somos especialistas em
+                                transformar complexidade em solução.</strong> Agende uma conversa conosco.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pacotes de Serviços Section -->
+    <section id="pacotes" class="py-20 md:py-28 bg-light-100">
+        <div class="container mx-auto px-6">
+            <h2 class="section-title text-3xl md:text-4xl">Modelos de <span class="accent-text">Parceria
+                    Estratégica</span></h2>
+            <p class="section-subtitle">Estruturas de contratação flexíveis, pensadas para alinhar nossos objetivos aos
+                seus, garantindo previsibilidade e valor em cada entrega.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Cards de pacotes aqui... -->
+                <div class="card-base">
+                    <h3 class="text-xl font-bold text-base-900">Pacote Essencial</h3>
+                    <p class="text-base-700 text-sm mb-6">Para validação de ideias e projetos de escopo definido.</p>
+                    <div class="card-content">
+                        <ul>
+                            <li>Implementação de solução pontual</li>
+                            <li>Configuração de ambiente</li>
+                            <li>Suporte técnico para implantação</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-base featured relative overflow-hidden">
+                    <div
+                        class="absolute top-0 right-0 text-xs bg-primary-500 text-white font-semibold py-1 px-3 transform translate-x-1/4 -translate-y-1/4 rotate-45">
+                        Popular</div>
+                    <h3 class="text-xl font-bold accent-text">Pacote Profissional</h3>
+                    <p class="text-base-700 text-sm mb-6">Para negócios que buscam evolução e crescimento contínuo.</p>
+                    <div class="card-content">
+                        <ul>
+                            <li>Desenvolvimento completo do projeto</li>
+                            <li>Ciclos de atualizações mensais</li>
+                            <li>Suporte técnico prioritário</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-base">
+                    <h3 class="text-xl font-bold text-base-900">Pacote Premium</h3>
+                    <p class="text-base-700 text-sm mb-6">Acompanhamento dedicado para máxima performance.</p>
+                    <div class="card-content">
+                        <ul>
+                            <li>Todos os benefícios do Profissional</li>
+                            <li>Ciclos de atualizações semanais</li>
+                            <li>Consultoria estratégica mensal</li>
+                            <li>Canal de suporte dedicado</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-base">
+                    <h3 class="text-xl font-bold text-base-900">Sob Demanda</h3>
+                    <p class="text-base-700 text-sm mb-6">Para projetos únicos e necessidades específicas.</p>
+                    <div class="card-content">
+                        <p>Um plano totalmente customizado, alinhado aos seus objetivos, cronograma e orçamento. Ideal
+                            para desafios complexos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeria de Projetos Section -->
+    <section id="galeria" class="py-20 md:py-28 bg-white">
+        <div class="container mx-auto">
+            <h2 class="section-title text-3xl md:text-4xl">Nosso <span class="accent-text">Portfólio Visual</span></h2>
+            <p class="section-subtitle px-6">Explore a qualidade e o design de alguns dos projetos que tivemos o prazer
+                de desenvolver.</p>
+            <div class="project-slider">
+                <div class="project-track">
+                    <!-- Imagens dos projetos -->
+                    <div class="project-image-card"><img src="imagens/projeto-1.jpg" alt="Screenshot do Projeto 1"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/007BFF/FFFFFF?text=Projeto+1';">
+                    </div>
+                    <div class="project-image-card"><img src="imagens/projeto-2.jpg" alt="Screenshot do Projeto 2"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/374151/FFFFFF?text=Projeto+2';">
+                    </div>
+                    <div class="project-image-card"><img src="imagens/projeto-3.jpg" alt="Screenshot do Projeto 3"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/10B981/FFFFFF?text=Projeto+3';">
+                    </div>
+                    <div class="project-image-card"><img src="imagens/projeto-4.jpg" alt="Screenshot do Projeto 4"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/F59E0B/FFFFFF?text=Projeto+4';">
+                    </div>
+                    <div class="project-image-card"><img src="imagens/projeto-5.jpg" alt="Screenshot do Projeto 5"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/8B5CF6/FFFFFF?text=Projeto+5';">
+                    </div>
+                    <div class="project-image-card"><img src="imagens/projeto-6.jpg" alt="Screenshot do Projeto 6"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/EC4899/FFFFFF?text=Projeto+6';">
+                    </div>
+                    <div class="project-image-card"><img src="imagens/projeto-7.jpg" alt="Screenshot do Projeto 6"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/EC4899/FFFFFF?text=Projeto+6';">
+                    </div>
+                    <div class="project-image-card"><img src="imagens/projeto-8.jpg" alt="Screenshot do Projeto 6"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/EC4899/FFFFFF?text=Projeto+6';">
+                    </div>
+                    <!-- Imagens duplicadas para loop -->
+                    <div class="project-image-card"><img src="imagens/projeto-1.jpg" alt="Screenshot do Projeto 1"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/007BFF/FFFFFF?text=Projeto+1';">
+                    </div>
+                    <div class="project-image-card"><img src="imagens/projeto-2.jpg" alt="Screenshot do Projeto 2"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/374151/FFFFFF?text=Projeto+2';">
+                    </div>
+                    <div class="project-image-card"><img src="imagens/projeto-3.jpg" alt="Screenshot do Projeto 3"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/10B981/FFFFFF?text=Projeto+3';">
+                    </div>
+                    <div class="project-image-card"><img src="imagens/projeto-4.jpg" alt="Screenshot do Projeto 4"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/F59E0B/FFFFFF?text=Projeto+4';">
+                    </div>
+                    <div class="project-image-card"><img src="imagens/projeto-5.jpg" alt="Screenshot do Projeto 5"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/8B5CF6/FFFFFF?text=Projeto+5';">
+                    </div>
+                    <div class="project-image-card"><img src="imagens/projeto-6.jpg" alt="Screenshot do Projeto 6"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/EC4899/FFFFFF?text=Projeto+6';">
+                    </div>
+                    <div class="project-image-card"><img src="imagens/projeto-7.jpg" alt="Screenshot do Projeto 6"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/EC4899/FFFFFF?text=Projeto+6';">
+                    </div>
+                    <div class="project-image-card"><img src="imagens/projeto-8.jpg" alt="Screenshot do Projeto 6"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/EC4899/FFFFFF?text=Projeto+6';">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projetos Recentes Section (Cases) -->
+    <section id="projetos" class="py-20 md:py-28 bg-light-100">
+        <div class="container mx-auto px-6">
+            <h2 class="section-title text-3xl md:text-4xl">Cases de Sucesso: <span class="accent-text">Tecnologia em
+                    Ação</span></h2>
+            <p class="section-subtitle">Explore como aplicamos nossa expertise para entregar valor tangível e vantagens
+                competitivas para clientes de diversos setores.</p>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Cards de cases aqui... -->
+                <div class="card-base">
+                    <h3 class="card-title">Página de Vendas – Barman Profissional</h3>
+                    <div class="card-content">
+                        <p class="mb-6">Landing page elegante, responsiva e com foco em conversão, criada para atrair
+                            clientes por meio de uma linguagem visual marcante e estratégias de marketing
+                            personalizadas.</p>
+                    </div>
+                    <a href="https://www.arcelinocavalcante.dev/pagina-de-vendas-barman/" target="_blank"
+                        class="w-full text-center mt-auto bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300">Ver
+                        Estudo de Caso</a>
+                </div>
+                <div class="card-base">
+                    <h3 class="card-title">Portfólio Profissional – Psicóloga</h3>
+                    <div class="card-content">
+                        <p class="mb-6">Portfólio completo com apresentação de serviços, identidade visual e agenda
+                            personalizada, permitindo que pacientes agendem consultas diretamente pelo site.</p>
+                    </div>
+                    <a href="#https://www.arcelinocavalcante.dev/portifolio-piscologa-karol/" target="_blank"
+                        class="w-full text-center mt-auto bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300">Ver
+                        Estudo de Caso</a>
+                </div>
+                <div class="card-base">
+                    <h3 class="card-title">Cardápio Digital – Espetaria</h3>
+                    <div class="card-content">
+                        <p class="mb-6">Cardápio online moderno e visual, com categorias, fotos de produtos, carrinho de
+                            compras e envio automático para o WhatsApp da espetaria.</p>
+                    </div>
+                    <a href="https://www.arcelinocavalcante.dev/cardapio-espetaria/" target="_blank"
+                        class="w-full text-center mt-auto bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300">Ver
+                        Estudo de Caso</a>
+                </div>
+                <div class="card-base">
+                    <h3 class="card-title">Cardápio Inteligente – Lanchonete TopSabor</h3>
+                    <div class="card-content">
+                        <p class="mb-6">Menu digital dinâmico com atalhos por categorias, fotos detalhadas dos produtos
+                            e integração direta com o WhatsApp para fechamento de pedidos.</p>
+                    </div>
+                    <a href="https://www.arcelinocavalcante.dev/cardapio-bar-02/" target="_blank"
+                        class="w-full text-center mt-auto bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300">Ver
+                        Estudo de Caso</a>
+                </div>
+                <div class="card-base">
+                    <h3 class="card-title">Cardápio Online – Loja de Bebidas Delivery</h3>
+                    <div class="card-content">
+                        <p class="mb-6">Sistema responsivo com design atrativo para lojas de bebidas, com produtos
+                            organizados por tipo, carrinho funcional e pedidos automatizados via WhatsApp.</p>
+                    </div>
+                    <a href="https://www.arcelinocavalcante.dev/cardapio-bebidas/" target="_blank"
+                        class="w-full text-center mt-auto bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300">Ver
+                        Estudo de Caso</a>
+                </div>
+                <div class="card-base">
+                    <h3 class="card-title">Sistema de Pedidos – Almoço & Marmitas</h3>
+                    <div class="card-content">
+                        <p class="mb-6">Plataforma para restaurantes e marmitarias que organiza pedidos de forma prática
+                            e eficiente, com interface intuitiva e integração para atendimento rápido.</p>
+                    </div>
+                    <a href="https://www.arcelinocavalcante.dev/cardapio-almoco-marmita/" target="_blank"
+                        class="w-full text-center mt-auto bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300">Ver
+                        Estudo de Caso</a>
+                </div>
+                <div class="card-base">
+                    <h3 class="card-title">Site Institucional – Serviços e Empresas</h3>
+                    <div class="card-content">
+                        <p class="mb-6">Criação de sites personalizados com foco em presença digital profissional, ideal
+                            para divulgar seus serviços e conquistar autoridade no mercado.</p>
+                    </div>
+                    <a href="#" target="_blank"
+                        class="w-full text-center mt-auto bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300">Ver
+                        Estudo de Caso</a>
+                </div>
+                <div class="card-base">
+                    <h3 class="card-title">Loja Online – Celular Express</h3>
+                    <div class="card-content">
+                        <p class="mb-6">Desenvolvimento de uma loja virtual moderna para venda de celulares, com vitrine
+                            digital, categorias organizadas, fotos de alta qualidade, carrinho de compras inteligente e
+                            integração direta com o WhatsApp para fechar vendas com agilidade.</p>
+                    </div>
+                    <a href="https://www.arcelinocavalcante.dev/loja-celular/" target="_blank"
+                        class="w-full text-center mt-auto bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300">Ver
+                        Estudo de Caso</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Depoimentos Section -->
+    <section id="depoimentos" class="py-20 md:py-28 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="section-title text-3xl md:text-4xl">A Voz de Nossos <span class="accent-text">Clientes</span>
+            </h2>
+            <p class="section-subtitle">A validação do nosso trabalho vem dos resultados e da satisfação daqueles que
+                confiam na DEV ARC para construir seu futuro digital.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 pt-10">
+                <!-- Cards de depoimentos aqui... -->
+                <div class="card-base text-center">
+                    <img src="imagens/cliente-joao.jpg" alt="Foto do Cliente João Silva"
+                        class="w-20 h-20 rounded-full object-cover mx-auto -mt-20 mb-4 border-4 border-white accent-border"
+                        onerror="this.onerror=null;this.src='https://placehold.co/100x100/cccccc/FFFFFF?text=JS';">
+                    <p class="italic mb-4">"A DEV ARC não entregou apenas um sistema, mas uma parceria estratégica. O
+                        profissionalismo e a profundidade técnica do Arcelino foram cruciais para o nosso sucesso."</p>
+                    <h4 class="font-bold text-base-900">João Silva</h4>
+                    <p class="text-sm text-light-400">CEO, TechCorp</p>
+                </div>
+                <div class="card-base text-center">
+                    <img src="imagens/cliente-maria.jpg" alt="Foto do Cliente Maria Oliveira"
+                        class="w-20 h-20 rounded-full object-cover mx-auto -mt-20 mb-4 border-4 border-white accent-border"
+                        onerror="this.onerror=null;this.src='https://placehold.co/100x100/007BFF/FFFFFF?text=MO';">
+                    <p class="italic mb-4">"Nossa loja virtual superou todas as expectativas. O design é impecável e a
+                        performance é incrível. As vendas aumentaram significativamente."</p>
+                    <h4 class="font-bold text-base-900">Maria Oliveira</h4>
+                    <p class="text-sm text-light-400">Gerente, VesteBem Moda</p>
+                </div>
+                <div class="card-base text-center">
+                    <img src="imagens/cliente-carlos.jpg" alt="Foto do Cliente Carlos Pereira"
+                        class="w-20 h-20 rounded-full object-cover mx-auto -mt-20 mb-4 border-4 border-white accent-border"
+                        onerror="this.onerror=null;this.src='https://placehold.co/100x100/cccccc/FFFFFF?text=CP';">
+                    <p class="italic mb-4">"A automação que a DEV ARC implementou nos economizou centenas de horas. Uma
+                        solução robusta, entregue com maestria e suporte exemplar."</p>
+                    <h4 class="font-bold text-base-900">Carlos Pereira</h4>
+                    <p class="text-sm text-light-400">Diretor, AgilizaFin</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Parceiros -->
+    <section id="parceiros" class="py-16 bg-light-100">
+        <div class="container mx-auto px-6 text-center">
+            <h3 class="text-base-700 font-semibold text-lg mb-8">Empresas que confiam na nossa engenharia de software
+            </h3>
+            <div class="logo-slider">
+                <div class="logo-track">
+                    <!-- Logos de parceiros aqui... -->
+                    <img src="https://placehold.co/150x50/a0aec0/ffffff?text=TechCorp" alt="Logo TechCorp"
+                        class="h-8 mx-10">
+                    <img src="https://placehold.co/150x50/a0aec0/ffffff?text=InovaDigital" alt="Logo InovaDigital"
+                        class="h-8 mx-10">
+                    <img src="https://placehold.co/150x50/a0aec0/ffffff?text=AgilizaFin" alt="Logo AgilizaFin"
+                        class="h-8 mx-10">
+                    <img src="https://placehold.co/150x50/a0aec0/ffffff?text=EducaMais" alt="Logo EducaMais"
+                        class="h-8 mx-10">
+                    <img src="https://placehold.co/150x50/a0aec0/ffffff?text=VesteBem" alt="Logo VesteBem"
+                        class="h-8 mx-10">
+                    <img src="https://placehold.co/150x50/a0aec0/ffffff?text=ConectaGlobal" alt="Logo ConectaGlobal"
+                        class="h-8 mx-10">
+                    <img src="https://placehold.co/150x50/a0aec0/ffffff?text=Quantum" alt="Logo Quantum"
+                        class="h-8 mx-10">
+                    <img src="https://placehold.co/150x50/a0aec0/ffffff?text=TechCorp" alt="Logo TechCorp"
+                        class="h-8 mx-10">
+                    <img src="https://placehold.co/150x50/a0aec0/ffffff?text=InovaDigital" alt="Logo InovaDigital"
+                        class="h-8 mx-10">
+                    <img src="https://placehold.co/150x50/a0aec0/ffffff?text=AgilizaFin" alt="Logo AgilizaFin"
+                        class="h-8 mx-10">
+                    <img src="https://placehold.co/150x50/a0aec0/ffffff?text=EducaMais" alt="Logo EducaMais"
+                        class="h-8 mx-10">
+                    <img src="https://placehold.co/150x50/a0aec0/ffffff?text=VesteBem" alt="Logo VesteBem"
+                        class="h-8 mx-10">
+                    <img src="https://placehold.co/150x50/a0aec0/ffffff?text=ConectaGlobal" alt="Logo ConectaGlobal"
+                        class="h-8 mx-10">
+                    <img src="https://placehold.co/150x50/a0aec0/ffffff?text=Quantum" alt="Logo Quantum"
+                        class="h-8 mx-10">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action / Formulário -->
+    <section id="contato" class="py-20 md:py-28 bg-light-200">
+        <div class="container mx-auto px-6">
+            <div class="bg-white p-8 md:p-12 rounded-lg shadow-xl max-w-3xl mx-auto border border-light-300">
+                <h2 class="text-3xl lg:text-4xl font-bold text-center mb-4 text-base-900">Vamos Construir Algo <span
+                        class="accent-text">Extraordinário</span>?</h2>
+                <p class="text-lg text-base-700 mb-8 text-center max-w-xl mx-auto">
+                    Inicie a conversa que pode redefinir o futuro do seu negócio. Preencha o formulário e nossa equipe
+                    de especialistas entrará em contato.
+                </p>
+                <form id="contactForm" class="space-y-6">
+                    <div>
+                        <label for="fullName" class="block text-sm font-medium text-base-800 mb-1">Nome Completo</label>
+                        <input type="text" id="fullName" name="fullName" class="form-input"
+                            placeholder="Seu nome completo" required>
+                    </div>
+                    <div>
+                        <label for="serviceSelect" class="block text-sm font-medium text-base-800 mb-1">Qual o seu
+                            principal interesse?</label>
+                        <select id="serviceSelect" name="serviceSelect" class="form-select" required>
+                            <option value="" disabled selected>Selecione um serviço ou pacote...</option>
+                            <optgroup label="Serviços">
+                                <option value="Presença Web Estratégica">Presença Web Estratégica</option>
+                                <option value="Sistemas e Plataformas Customizadas">Sistemas e Plataformas Customizadas
+                                </option>
+                                <option value="Desenvolvimento de APIs e Integrações">Desenvolvimento de APIs e
+                                    Integrações</option>
+                                <option value="IA e Automação de Processos">IA e Automação de Processos</option>
+                                <option value="Consultoria e Estratégia Digital">Consultoria e Estratégia Digital
+                                </option>
+                                <option value="Projetos Especiais">Projetos Especiais</option>
+                            </optgroup>
+                            <optgroup label="Pacotes">
+                                <option value="Pacote Essencial">Pacote Essencial</option>
+                                <option value="Pacote Profissional">Pacote Profissional</option>
+                                <option value="Pacote Premium">Pacote Premium</option>
+                                <option value="Sob Demanda">Sob Demanda</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="projectDetails" class="block text-sm font-medium text-base-800 mb-1">Descreva seu
+                            Desafio ou Ideia</label>
+                        <textarea id="projectDetails" name="projectDetails" rows="4" class="form-textarea"
+                            placeholder="Conte-nos sobre suas necessidades e objetivos..." required></textarea>
+                    </div>
+                    <button type="button" id="sendToWhatsApp"
+                        class="w-full flex items-center justify-center bg-primary-500 hover:bg-primary-600 text-white font-bold py-3 px-8 rounded-lg text-lg transition-all duration-300 hover:scale-105 shadow-lg shadow-primary-500/30">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                        Solicitar Orçamento
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 bg-white text-center border-t border-light-200">
+        <div class="container mx-auto px-6">
+            <p class="text-base-700">&copy; <span id="currentYear"></span> <span class="font-bold accent-text">DEV
+                    ARC</span>. Idealizado por Arcelino Cavalcante. Todos os direitos reservados.</p>
+            <p class="text-sm text-gray-500 mt-2">Engenharia de Software para Negócios de Alta Performance.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Efeito de Digitação
+            const typingEffectElement = document.getElementById('typing-effect');
+            if (typingEffectElement && window.matchMedia('(min-width: 768px)').matches) {
+                const wordsToType = ["Inovadoras", "Escaláveis", "Inteligentes", "Sob Medida"];
+                let wordIndex = 0; let charIndex = 0; let isDeleting = false;
+                const typingSpeed = 150; const erasingSpeed = 100; const delayBetweenWords = 2000;
+
+                function type() {
+                    const currentWord = wordsToType[wordIndex];
+                    let displayText = '';
+                    if (isDeleting) {
+                        displayText = currentWord.substring(0, charIndex - 1); charIndex--;
+                    } else { displayText = currentWord.substring(0, charIndex + 1); charIndex++; }
+                    typingEffectElement.textContent = displayText;
+                    if (!isDeleting && charIndex === currentWord.length) {
+                        isDeleting = true; setTimeout(type, delayBetweenWords);
+                    } else if (isDeleting && charIndex === 0) {
+                        isDeleting = false; wordIndex = (wordIndex + 1) % wordsToType.length; setTimeout(type, typingSpeed);
+                    } else { setTimeout(type, isDeleting ? erasingSpeed : typingSpeed); }
+                }
+                type();
+            }
+
+            // Hamburger Menu
+            const hamburgerButton = document.getElementById('hamburgerButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const navLinks = mobileMenu.querySelectorAll('a');
+            const toggleMenu = () => {
+                const isHidden = mobileMenu.classList.contains('hidden');
+                if (isHidden) {
+                    mobileMenu.classList.remove('hidden');
+                    hamburgerButton.innerHTML = `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>`;
+                } else {
+                    mobileMenu.classList.add('hidden');
+                    hamburgerButton.innerHTML = `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>`;
+                }
+            };
+            hamburgerButton.addEventListener('click', toggleMenu);
+            navLinks.forEach(link => link.addEventListener('click', () => { if (!mobileMenu.classList.contains('hidden')) { toggleMenu(); } }));
+
+            // Smooth Scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault(); const targetId = this.getAttribute('href'); const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const headerOffset = document.querySelector('nav').offsetHeight;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+                    }
+                });
+            });
+
+            // Footer Year
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            // WhatsApp Form
+            const whatsAppButton = document.getElementById('sendToWhatsApp');
+            if (whatsAppButton) {
+                whatsAppButton.addEventListener('click', function () {
+                    const form = document.getElementById('contactForm');
+                    if (form.checkValidity()) {
+                        const fullName = document.getElementById('fullName').value;
+                        const service = document.getElementById('serviceSelect').value;
+                        const details = document.getElementById('projectDetails').value;
+                        const seuNumeroWhatsApp = "SEUNUMEROAQUI"; // <-- TROQUE PELO SEU NÚMERO COM CÓDIGO DO PAÍS
+
+                        let message = `Olá, DEV ARC! Gostaria de um orçamento.\n\n*Nome:* ${fullName}\n*Interesse:* ${service}\n*Detalhes:* ${details}\n\nAguardo contato!`;
+                        const whatsappUrl = `https://wa.me/${seuNumeroWhatsApp}?text=${encodeURIComponent(message)}`;
+                        window.open(whatsappUrl, '_blank');
+                    } else { form.reportValidity(); }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
