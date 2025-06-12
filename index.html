@@ -8,6 +8,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
+    <!-- SCRIPT DO EMAILJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
     <script>
         // Configuração do Tailwind para a paleta de cores (Branco, Preto e Azul)
         tailwind.config = {
@@ -931,6 +934,11 @@
                             placeholder="Seu nome completo" required>
                     </div>
                     <div>
+                        <label for="email" class="block text-sm font-medium text-base-800 mb-1">Seu E-mail</label>
+                        <input type="email" id="email" name="email" class="form-input"
+                            placeholder="seu.email@exemplo.com" required>
+                    </div>
+                    <div>
                         <label for="serviceSelect" class="block text-sm font-medium text-base-800 mb-1">Qual o seu
                             principal interesse?</label>
                         <select id="serviceSelect" name="serviceSelect" class="form-select" required>
@@ -960,7 +968,7 @@
                         <textarea id="projectDetails" name="projectDetails" rows="4" class="form-textarea"
                             placeholder="Conte-nos sobre suas necessidades e objetivos..." required></textarea>
                     </div>
-                    <button type="button" id="sendToWhatsApp"
+                    <button type="submit"
                         class="w-full flex items-center justify-center bg-primary-500 hover:bg-primary-600 text-white font-bold py-3 px-8 rounded-lg text-lg transition-all duration-300 hover:scale-105 shadow-lg shadow-primary-500/30">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="2">
@@ -1041,21 +1049,36 @@
             // Footer Year
             document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-            // WhatsApp Form
-            const whatsAppButton = document.getElementById('sendToWhatsApp');
-            if (whatsAppButton) {
-                whatsAppButton.addEventListener('click', function () {
-                    const form = document.getElementById('contactForm');
-                    if (form.checkValidity()) {
-                        const fullName = document.getElementById('fullName').value;
-                        const service = document.getElementById('serviceSelect').value;
-                        const details = document.getElementById('projectDetails').value;
-                        const seuNumeroWhatsApp = "SEUNUMEROAQUI"; // <-- TROQUE PELO SEU NÚMERO COM CÓDIGO DO PAÍS
+            // MUDANÇA: LÓGICA DE ENVIO DO FORMULÁRIO COM EMAILJS
+            const contactForm = document.getElementById('contactForm');
+            const submitButton = contactForm.querySelector('button[type="submit"]');
 
-                        let message = `Olá, DEV ARC! Gostaria de um orçamento.\n\n*Nome:* ${fullName}\n*Interesse:* ${service}\n*Detalhes:* ${details}\n\nAguardo contato!`;
-                        const whatsappUrl = `https://wa.me/${seuNumeroWhatsApp}?text=${encodeURIComponent(message)}`;
-                        window.open(whatsappUrl, '_blank');
-                    } else { form.reportValidity(); }
+            if (contactForm) {
+                contactForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    const serviceID = 'service_0661znt'; // SEU SERVICE ID
+                    const templateID = 'template_yvzikpk'; // <-- COLOQUE O NOVO TEMPLATE ID AQUI
+                    const publicKey = 'dpvLeJyb3lBrGskjh';   // SUA PUBLIC KEY
+
+                    // Altera o estado do botão
+                    const originalButtonText = submitButton.innerHTML;
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Enviando...`;
+
+                    emailjs.sendForm(serviceID, templateID, this, publicKey)
+                        .then(() => {
+                            submitButton.innerHTML = 'Enviado com Sucesso!';
+                            setTimeout(() => {
+                                contactForm.reset();
+                                submitButton.disabled = false;
+                                submitButton.innerHTML = originalButtonText;
+                            }, 4000);
+                        }, (err) => {
+                            alert('Ocorreu um erro ao enviar o formulário. Por favor, tente novamente.\n\n' + JSON.stringify(err));
+                            submitButton.disabled = false;
+                            submitButton.innerHTML = originalButtonText;
+                        });
                 });
             }
         });
